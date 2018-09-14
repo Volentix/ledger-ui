@@ -1,4 +1,5 @@
 # ledger-ui
+Webapp for the Volentix Ledger
 
 > Nuxt.js project
 
@@ -18,6 +19,3 @@ $ npm start
 # generate static project
 $ npm run generate
 ```
-
-For detailed explanation on how things work, checkout the [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
-
