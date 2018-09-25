@@ -8,19 +8,25 @@
     <b-table :data="transactions" class="is-fullwidth" striped is-narrow bordered is-fullwidth>
       <template slot-scope="props">
         <b-table-column label="From" class="has-text-centered" field="fromAccount">
-          {{ props.row.from }}
+          {{ props.row.fromAccount }}
         </b-table-column>
+        <!-- <b-table-column label="From Key" class="has-text-centered" field="fromAccount">
+          {{ props.row.fromKey }}
+        </b-table-column> -->
         <b-table-column label="To" class="has-text-centered" field="toAccount">
-          {{ props.row.to.account }}
+          {{ props.row.toAccount }}
         </b-table-column>
+        <!-- <b-table-column label="To Key" class="has-text-centered" field="toAccount">
+          {{ props.row.sToKey }}
+        </b-table-column> -->
         <b-table-column label="Amount" class="has-text-centered" field="vtx">
           {{ props.row.amount }}
         </b-table-column>
-        <b-table-column label="Currency" class="has-text-centered" field="status">
-          {{ props.row.currency }}
+        <b-table-column label="Comment" class="has-text-centered" field="comment">
+          {{ props.row.comment }}
         </b-table-column>
-        <b-table-column label="Status" class="has-text-centered" field="status">
-          {{ props.row.status }}
+        <b-table-column label="To Key" class="has-text-centered" field="nonce">
+          {{ props.row.sToKey }}
         </b-table-column>
       </template>
     </b-table>
@@ -29,12 +35,11 @@
 
 
 <script>
-import Ledger from '../static/ledger.js';
-
+import Ledger from '../ledger.js';
 const httpEndpoint = process.env.HTTP_ENDPOINT;
 const chainId = process.env.CHAIN_ID;
 const keyProvider = process.env.KEY_PROVIDER;
-//console.log("test");
+
 const ledger = new Ledger({
   httpEndpoint: httpEndpoint,
   chainId: chainId,
@@ -45,29 +50,35 @@ export default {
     const data = {
       transactions: [
         {
-          from: "",
-          to: {
-            account: "",
-            wallet: ""
-          },
+          s: "",
+          key: 0,
+          Id: 0,
+          sToKey: "",
+          fromAccount: "",
+          toAccount: "",
+          fromKey: "",
           currency: "",
           amount: 0,
-          date: ""
+          comment: "",
+          nonce: ""
         }
       ]
     };
     return data;
   },
   mounted() {
-    //this.retrieveTransactions();
+    this.retrieveTransactions();
   },
   methods: {
     async retrieveTransactions() {
       const userTransactions = await ledger.retrieveTransactions({
-        account: "vtxtrust",       // the ID of an account
-        key: "EOS5vBqi8YSzFCeTv4weRTwBzVkGCY5PN5Hm1Gp3133m8g9MtHTbW"            // the public key of an EOS wallet
+        account: "",       // the ID of an account
+        wallet: "",            // the public key of an EOS wallet
+        limit: 100
       });
-      this.transactions = userTransactions.transactions;
+      this.transactions = userTransactions.output1;
+      //this.transactions = userTransactions.transactions;
+      console.log(userTransactions.output1);
     }
   }
 }

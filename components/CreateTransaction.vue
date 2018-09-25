@@ -7,22 +7,22 @@
     <div class="card-content has-text-left">
       <form @submit.prevent="transferVTX">
         <b-field label="Enter your Account ID*">
-          <b-input v-model="from.fromAccountID" placeholder="Account ID" required expanded/>
+          <b-input v-model="from.account" placeholder="Account ID" required expanded/>
         </b-field>
         <b-field label="Enter your user public key">
-          <b-input v-model="from.fromWallet" placeholder="Enter your user public key" expanded type="text"/>
+          <b-input v-model="from.wallet" placeholder="Enter your user public key" expanded type="text"/>
         </b-field>
         <b-field label="Enter recipient's Account ID*">
-          <b-input v-model="to.toAccountID" placeholder="Recipient's Account ID " required expanded type="text"/>
+          <b-input v-model="to.account" placeholder="Recipient's Account ID " required expanded type="text"/>
         </b-field>
         <b-field label="Enter recipient's user public key">
-          <b-input v-model="to.toWallet" placeholder="Recipient's user public key" expanded type="text"/>
+          <b-input v-model="to.wallet" placeholder="Recipient's user public key" expanded type="text"/>
         </b-field>
         <b-field label="VTX*">
           <b-input v-model="amount" placeholder="VTX number to transfer" required expanded type="text"/>
         </b-field>
         <b-field label="Add Note">
-          <b-input v-model="transferNote" type="textarea" placeholder="Type a message to the recipient"></b-input>
+          <b-input v-model="comment" type="textarea" placeholder="Type a message to the recipient"></b-input>
         </b-field>
         <p class="control">
           <button class="button is-success">Send</button>
@@ -49,7 +49,7 @@
 
 <script>
 require("dotenv").config();
-import Ledger from '../static/ledger.js';
+import Ledger from '../ledger.js';
 const httpEndpoint = process.env.HTTP_ENDPOINT;
 const chainId = process.env.CHAIN_ID;
 const keyProvider = process.env.KEY_PROVIDER;
@@ -64,15 +64,15 @@ export default {
   data() {
     const data = {
       from: {
-        fromAccountID: "",
-        fromWallet: ""
+        account: "",
+        wallet: ""
       },
       to: {
-        toAccountID: "",
-        toWallet: ""
+        account: "",
+        wallet: ""
       },
-      amount: 0,
-      transferNote: "",
+      amount: "",
+      comment: "",
       transferMessage: "",
       isModalActive: false,
       //balance: 0
@@ -81,24 +81,19 @@ export default {
   },
   methods: {
     async transferVTX() {
-      if (this.balance > this.amount) {
+      // if (this.balance > this.amount) {
         const result = await ledger.recordTransfer({
-          from: {
-            account: this.from.fromAccountID,
-            wallet: this.from.fromWallet
-          },
-          to: {
-            account: this.to.toAccountID,
-            wallet: this.to.toWallet
-          },
-          amount: this.amount
+          from: this.from,
+          to: this.to,
+          amount: this.amount,
+          comment: this.comment
         });
         this.isModalActive = true;
         this.transferMessage = `You transfered ${result.amount} VTX from account ${result.from.account} to account ${result.to.account}`
-      } else {
-        this.isModalActive = true;
-        this.transferMessage = `Balance is not enough to make this transfer`
-      }
+      // } else {
+      //   this.isModalActive = true;
+      //   this.transferMessage = `Balance is not enough to make this transfer`
+      // }
     }
   }
 }

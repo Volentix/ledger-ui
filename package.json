@@ -17,6 +17,7 @@
     "@nuxtjs/bulma": "^1.2.0",
     "@nuxtjs/dotenv": "^1.1.1",
     "buefy": "^0.6.6",
+    "dotenv": "^6.0.0",
     "eosjs": "^16.0.7",
     "moment": "^2.22.2",
     "nuxt": "^1.4.2",

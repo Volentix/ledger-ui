@@ -17,12 +17,8 @@
 </template>
 
 <script>
-import Ledger from '../static/ledger.js';
-let transferDetails = {
-  from: "fromAcc",
-  to: "toAcc",
-  amount: 0
-}
+import Ledger from '../ledger.js';
+
 const httpEndpoint = process.env.HTTP_ENDPOINT;
 const chainId = process.env.CHAIN_ID;
 const keyProvider = process.env.KEY_PROVIDER;
@@ -32,7 +28,7 @@ const ledger = new Ledger({
   chainId: chainId,
   keyProvider: keyProvider
 });
-
+// console.log(httpEndpoint);
 export default {
   data() {
     let data = {
@@ -46,10 +42,10 @@ export default {
   },
   methods: {
     async getBalance() {
-      console.log("Retrieving balance")
+      //console.log("Retrieving balance");
       const userBalance = await ledger.retrieveBalance({
         account: "vtxtrust",       // the ID of an account
-        key: "EOS5vBqi8YSzFCeTv4weRTwBzVkGCY5PN5Hm1Gp3133m8g9MtHTbW"            // the public key of an EOS wallet
+        wallet: ""            // the public key of an EOS wallet
       });
       this.balance = userBalance.amount;
       this.currency = userBalance.currency;
