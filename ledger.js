@@ -22,14 +22,15 @@ export default class Ledger {
   }
 
   async retrieveBalance({ account, wallet }) {
-
     var output = await this.eos.getTableRows({
       code: 'stdvtxledger',
       scope: 'stdvtxledger',
       table: 'entry',
       json: true,
+      limit: 100000
     });
      var amount = 0;
+     console.log(Object.keys(output.rows).length)
      for (var i = 0; i < Object.keys(output.rows).length; i++) {
       if (wallet === "") {
         if (output.rows[i].fromAccount.localeCompare(account) == 0) {
@@ -38,6 +39,7 @@ export default class Ledger {
         if (output.rows[i].toAccount.localeCompare(account) == 0) {
           amount += output.rows[i].amount;
         }
+        console.log("Amount: "+ amount);
       }
       else  {
         if (output.rows[i].sToKey.localeCompare(wallet) == 0) {
@@ -135,24 +137,8 @@ export default class Ledger {
       }
      }
      if (account === "" && wallet === "") {
-       //console.log("test");
-       //output1.push(output);
        output1.push(output.rows)
-    //    if (output.rows[i].fromAccount.localeCompare(account) == 0) {
-    //      output1.push(output.rows[i]);
-    //    }
-    //    if (output.rows[i].toAccount.localeCompare(account) == 0) {
-    //      output1.push(output.rows[i]);
-    //    }
-    //  } else {
-    //    if (output.rows[i].sToKey.localeCompare(wallet) == 0) {
-    //      output1.push(output.rows[i]);
-    //    }
-    //    if (output.rows[i].fromKey.localeCompare(wallet) == 0) {
-    //      output1.push(output.rows[i]);
-    //    }
      }
-     //}
     output1.splice(0, Object.keys(output1).length - limit);
     //console.log("output: " + output1);
     return {
