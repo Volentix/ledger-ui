@@ -1,16 +1,29 @@
 <template>
-  <div class="card">
-    <header class="card-header has-text-centered">
-      <p class="has-text-centered is-size-5">
-        Your balance
+  <div>
+    <form @submit.prevent="getBalance">
+      <b-field label="Choose an account">
+        <b-input v-model="account" placeholder="Account" expanded type="text"/>
+      </b-field>
+      <b-field label="Choose a wallet">
+        <b-input v-model="wallet" placeholder="Wallet" expanded type="text"/>
+      </b-field>
+      <p class="control">
+        <button class="button is-success">Get balance</button>
       </p>
-    </header>
-    <div class="level has-text-centered">
-      <div class="level-item is-size-4">
-        <span>{{ currency }} </span>
-      </div>
-      <div class="level-item is-size-4">
-        <span> {{ balance }} </span>
+    </form>
+    <div class="card">
+      <header class="card-header has-text-centered">
+        <p class="has-text-centered is-size-5">
+          Your balance
+        </p>
+      </header>
+      <div class="level has-text-centered">
+        <div class="level-item is-size-4">
+          <span>{{ currency }} </span>
+        </div>
+        <div class="level-item is-size-4">
+          <span> {{ balance }} </span>
+        </div>
       </div>
     </div>
   </div>
@@ -32,20 +45,22 @@ const ledger = new Ledger({
 export default {
   data() {
     let data = {
+      account: "",
+      wallet: "",
       balance: 0,
       currency: ""
     }
   return data;
   },
-  mounted() {
-    this.getBalance();
-  },
+  // mounted() {
+  //   this.getBalance();
+  // },
   methods: {
     async getBalance() {
       //console.log("Retrieving balance");
       const userBalance = await ledger.retrieveBalance({
-        account: "vtxdistrib",       // the ID of an account
-        wallet: ""            // the public key of an EOS wallet
+        account: this.account,       // the ID of an account
+        wallet: this.wallet            // the public key of an EOS wallet
       });
       this.balance = userBalance.amount;
       this.currency = userBalance.currency;

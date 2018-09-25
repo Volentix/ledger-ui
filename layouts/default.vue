@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <div id="nav" class="has-text-centered">
-      <router-link to="/">Transfer </router-link>
-      <router-link to="/ConfirmTransaction">Confirm transactions</router-link>
+      <router-link to="/Balance">Balance</router-link>
+      <router-link to="/">Transfer</router-link>
       <router-link to="/Transactions">Transactions</router-link>
-      <router-link to="/Login">Login</router-link>
+      <!-- <router-link to="/Login">Login</router-link> -->
     </div>
     <div class="columns is-fullheight is-hidden-mobile is-centered">
       <nuxt/>
