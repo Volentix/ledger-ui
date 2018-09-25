@@ -44,7 +44,7 @@ export default {
     async getBalance() {
       //console.log("Retrieving balance");
       const userBalance = await ledger.retrieveBalance({
-        account: "vtxtrust",       // the ID of an account
+        account: "vtxdistrib",       // the ID of an account
         wallet: ""            // the public key of an EOS wallet
       });
       this.balance = userBalance.amount;

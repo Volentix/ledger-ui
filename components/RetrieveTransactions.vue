@@ -74,7 +74,7 @@ export default {
       const userTransactions = await ledger.retrieveTransactions({
         account: "",       // the ID of an account
         wallet: "",            // the public key of an EOS wallet
-        limit: 100
+        limit: 10
       });
       this.transactions = userTransactions.output1;
       //this.transactions = userTransactions.transactions;
