@@ -30,7 +30,7 @@ export default class Ledger {
       limit: 100000
     });
      var amount = 0;
-     console.log(Object.keys(output.rows).length)
+     //console.log(Object.keys(output.rows).length)
      for (var i = 0; i < Object.keys(output.rows).length; i++) {
       if (wallet === "") {
         if (output.rows[i].fromAccount.localeCompare(account) == 0) {
@@ -39,7 +39,7 @@ export default class Ledger {
         if (output.rows[i].toAccount.localeCompare(account) == 0) {
           amount += output.rows[i].amount;
         }
-        console.log("Amount: "+ amount);
+        //console.log("Amount: "+ amount);
       }
       else  {
         if (output.rows[i].sToKey.localeCompare(wallet) == 0) {

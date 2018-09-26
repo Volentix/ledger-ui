@@ -47,7 +47,7 @@ export default {
     let data = {
       account: "",
       wallet: "",
-      balance: 0,
+      balance: null,
       currency: ""
     }
   return data;

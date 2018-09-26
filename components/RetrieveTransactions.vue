@@ -1,5 +1,21 @@
 <template>
-  <div>
+  <div class="has-text-centered">
+    <div class="select_account">
+      <form @submit.prevent="retrieveTransactions">
+        <b-field label="Choose an account">
+          <b-input v-model="selectedAccount" placeholder="Account" expanded type="text"/>
+        </b-field>
+        <b-field label="Choose a wallet">
+          <b-input v-model="selectedWallet" placeholder="Wallet" expanded type="text"/>
+        </b-field>
+        <b-field label="Limit">
+          <b-input v-model="transactionsLimit" placeholder="Limit" expanded type="text"/>
+        </b-field>
+        <p class="control">
+          <button class="button is-success">Retrieve transactions</button>
+        </p>
+      </form>
+    </div>
     <div class="has-text-centered is-size-5">
       <p>
       Transactions history
@@ -46,6 +62,20 @@ const ledger = new Ledger({
   keyProvider: keyProvider
 });
 export default {
+  props: {
+    perPage: {
+      type: Number,
+      default: 5
+    },
+    paginated: {
+      type: Boolean,
+      default: true
+    },
+    limit: {
+      type: Number,
+      default: undefined
+    }
+  },
   data() {
     const data = {
       transactions: [
@@ -58,27 +88,25 @@ export default {
           toAccount: "",
           fromKey: "",
           currency: "",
-          amount: 0,
+          amount: null,
           comment: "",
           nonce: ""
         }
-      ]
+      ],
+      selectedAccount: "",
+      selectedWallet: "",
+      transactionsLimit: 10
     };
     return data;
-  },
-  mounted() {
-    this.retrieveTransactions();
   },
   methods: {
     async retrieveTransactions() {
       const userTransactions = await ledger.retrieveTransactions({
-        account: "",       // the ID of an account
-        wallet: "",            // the public key of an EOS wallet
-        limit: 10
+        account: this.selectedAccount,       // the ID of an account
+        wallet: this.selectedWallet,            // the public key of an EOS wallet
+        limit: this.transactionsLimit
       });
       this.transactions = userTransactions.output1;
-      //this.transactions = userTransactions.transactions;
-      console.log(userTransactions.output1);
     }
   }
 }
@@ -87,5 +115,9 @@ export default {
 <style>
 p {
   margin-bottom: 2rem;
+}
+.select_account {
+  width: 25rem;
+  margin: 0 auto;
 }
 </style>
