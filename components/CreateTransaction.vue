@@ -5,7 +5,7 @@
     </div>
     <div class="card">
     <div class="card-content has-text-left">
-      <form @submit.prevent="transferVTX">
+      <form @submit.prevent="checkBalance">
         <b-field label="Enter your Account ID*">
           <b-input v-model="from.account" placeholder="Account ID" required expanded/>
         </b-field>
@@ -31,7 +31,7 @@
     </div>
     <b-modal :active.sync="isModalActive" has-modal-card>
       <div class="card">
-        <div class="card-header is-size-5">
+        <div class="card-header is-size-5 has-text-centered">
           <p>
             Transfer
           </p>
@@ -80,20 +80,28 @@ export default {
     return data;
   },
   methods: {
-    async transferVTX() {
-      // if (this.balance > this.amount) {
-        const result = await ledger.recordTransfer({
-          from: this.from,
-          to: this.to,
-          amount: this.amount,
-          comment: this.comment
-        });
+    async checkBalance() {
+      const userBalance = await ledger.retrieveBalance({
+        account: this.from.account,       // the ID of an account
+        wallet: this.from.wallet            // the public key of an EOS wallet
+      });
+      let balance = userBalance.amount;
+      console.log(balance, this.amount);
+      if (balance < this.amount) {
         this.isModalActive = true;
-        this.transferMessage = `You transfered ${result.amount} VTX from account ${result.from.account} to account ${result.to.account}`
-      // } else {
-      //   this.isModalActive = true;
-      //   this.transferMessage = `Balance is not enough to make this transfer`
-      // }
+        this.transferMessage = `Balance is not enough to make this transfer`
+      }
+      else { this.transferVTX() }
+    },
+    async transferVTX() {
+      const result = await ledger.recordTransfer({
+        from: this.from,
+        to: this.to,
+        amount: this.amount,
+        comment: this.comment
+      });
+      this.isModalActive = true;
+      this.transferMessage = `You transfered ${result.amount} VTX from account ${result.from.account} to account ${result.to.account}`
     }
   }
 }
